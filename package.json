@@ -4,17 +4,30 @@
   "description": "Hotel Management System API",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "tsx src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/index.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/index.js",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "@neondatabase/serverless": "^1.0.0",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.43.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "path-to-regexp": "^6.2.1",
+    "zod": "^3.25.28"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
-    "tsx": "^4.6.2",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20.10.6",
-    "@types/express": "^4.17.21"
+    "drizzle-kit": "^0.31.1",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
   }
 }
