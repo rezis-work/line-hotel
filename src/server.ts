@@ -1,65 +1,11 @@
 import express from "express";
-import { schemas } from "./utils/validation";
-import { validate } from "./utils/validation";
-import { testConnection } from "./config";
+import authRoutes from "./routes/auth";
 
 const app = express();
 
 app.use(express.json());
 
-app.get("/health", (req, res) => {
-  res.json({
-    status: "OK",
-    message: "Server is running",
-    timestamp: new Date().toISOString(),
-  });
-});
-
-app.get("/test-error", (req, res, next) => {
-  const error = new Error("This is a test error");
-  next(error);
-});
-
-app.post("/test-validation", validate(schemas.testUser), (req, res) => {
-  // If we reach here, validation passed
-  const { name, email, age } = req.body;
-
-  res.json({
-    success: true,
-    message: "Validation passed!",
-    data: {
-      name,
-      email,
-      age,
-      receivedAt: new Date().toISOString(),
-    },
-  });
-});
-
-app.get("/test-db", async (req, res) => {
-  try {
-    const isConnected = await testConnection();
-
-    if (isConnected) {
-      res.json({
-        success: true,
-        message: "Database connection successful",
-        timestamp: new Date().toISOString(),
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        message: "Database connection failed",
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Database test failed",
-      error: error instanceof Error ? error.message : "Unknown error",
-    });
-  }
-});
+app.use("/api/auth", authRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
