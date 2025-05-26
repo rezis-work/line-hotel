@@ -44,6 +44,7 @@ export const schemas = {
       .max(100, "Last name too long"),
     phone: z.string().optional(),
   }),
+
   login: z.object({
     email: z.string().email("Invalid email format"),
     password: z.string().min(1, "Password is required"),
@@ -51,5 +52,60 @@ export const schemas = {
 
   refreshToken: z.object({
     refreshToken: z.string().min(1, "Refresh token is required"),
+  }),
+
+  createRoomType: z.object({
+    name: z
+      .string()
+      .min(1, "Room type name is required")
+      .max(100, "Name too long"),
+    description: z.string().optional(),
+    basePrice: z.number().positive("Base price must be positive"),
+    capacity: z
+      .number()
+      .int()
+      .min(1, "Capacity must be at least 1")
+      .max(10, "Capacity too high"),
+    bedType: z.enum(["single", "double", "queen", "king"]),
+    size: z.number().int().positive("Size must be positive").optional(),
+    amenities: z.array(z.string()).optional(),
+  }),
+
+  updateRoomType: z.object({
+    name: z.string().min(1).max(100).optional(),
+    description: z.string().optional(),
+    basePrice: z.number().positive().optional(),
+    capacity: z.number().int().min(1).max(10).optional(),
+    bedType: z.enum(["single", "double", "queen", "king"]).optional(),
+    size: z.number().int().positive().optional(),
+    amenities: z.array(z.string()).optional(),
+    isActive: z.boolean().optional(),
+  }),
+
+  createRoom: z.object({
+    roomNumber: z
+      .string()
+      .min(1, "Room number is required")
+      .max(20, "Room number too long"),
+    roomTypeId: z.number().int().positive("Valid room type is required"),
+    floor: z.number().int().min(1, "Floor must be at least 1"),
+    notes: z.string().optional(),
+  }),
+
+  updateRoom: z.object({
+    roomNumber: z.string().min(1).max(20).optional(),
+    roomTypeId: z.number().int().positive().optional(),
+    floor: z.number().int().min(1).optional(),
+    status: z
+      .enum([
+        "available",
+        "occupied",
+        "maintenance",
+        "out_of_order",
+        "cleaning",
+      ])
+      .optional(),
+    isActive: z.boolean().optional(),
+    notes: z.string().optional(),
   }),
 };
